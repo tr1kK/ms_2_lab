@@ -1,6 +1,7 @@
 import numpy
 import matplotlib.pyplot as plt
 import fitz
+import pylatex
 
 
 variant = 45
@@ -25,18 +26,15 @@ def read_array_pdf(v, filename, flag=False):
 
 
 def create_table():
-    doc = pylatex.Document()
-    with doc.create(pylatex.Tabular("rc|cl")) as table:
-        table.add_hline()
-        table.add_row((1, 2, 3, 4))
-        table.add_hline(1, 2)
-        table.add_empty_row()
-        table.add_row((4, 5, 6, 7))
-    doc.generate_pdf(compiler='latexmk')
+    doc = pylatex.Document("test")
+    doc.append("Some text")
+    doc.generate_pdf()
 
 
-exp = read_array_pdf(variant, exp_pdf)
-norm = read_array_pdf(variant, norm_pdf)
-a_uniform, b_uniform, uniform = read_array_pdf(variant, uniform_pdf, flag=True)
-lamb = 1.275
-m = 8
+if __name__ == "__main__":
+    exp = read_array_pdf(variant, exp_pdf)
+    norm = read_array_pdf(variant, norm_pdf)
+    a_uniform, b_uniform, uniform = read_array_pdf(variant, uniform_pdf, flag=True)
+    lamb = 1.275
+    m = 8
+    create_table()
