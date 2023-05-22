@@ -161,9 +161,10 @@ def task_2(norm_dist):
         '$w_i$': np.append(freq_intervals, np.sum(freq_intervals))
     })
 
-    mean = np.mean(norm_dist)
+    mean = np.sum(mean_interval * freq_intervals)
     var = np.sum((mean_interval - mean)**2 * freq_intervals)
     sigma = var**0.5
+    print("Показатели нормального распределения:\n", f"Мат ожидание {mean}\n", f"Дисперсия {var}\n", f"Сигма {sigma}")
 
     a_k = (bins - mean) / sigma
     density = 1 / sigma * (scipy.stats.norm.pdf(a_k, loc=0, scale=1))
@@ -230,9 +231,11 @@ def task_1_5(exp_dist):
 
     first_moment = np.sum(mean_interval * freq_intervals)
     lamb_ = 1 / first_moment
+    print("Лямбда показательного распределения: ", lamb_)
     f_lower = f_exp(bins, lamb_)
     f_upper = big_f_exp(bins, lamb_)
-    p_k = f_upper[1:] - f_upper[:-1]
+    p_k = f_upper[1:-1] - f_upper[:-2]
+    p_k = np.append(p_k, 1 - f_upper[-2])
     data_4 = pd.DataFrame({
         "$k$": np.append(np.arange(0, m + 1), [""]),
         "$a_k$": np.append(np.round(bins, 5), [""]),
@@ -302,9 +305,9 @@ def task_1_5(exp_dist):
 
 
 if __name__ == "__main__":
-    f_1 = open('task_3_4/tab_crit_kalm.txt', 'w')
+    f_3 = open('task_3_4/tab_crit_kalm.txt', 'w')
     f_2 = open('task_2/tab_crit.txt', 'w')
-    f_3 = open('task_1_5/tab_crit_kalm.txt', 'w')
+    f_1 = open('task_1_5/tab_crit_kalm.txt', 'w')
     exp = read_array_pdf(variant, exp_pdf)
     norm = read_array_pdf(variant, norm_pdf)
     a_uniform, b_uniform, uniform = read_array_pdf(variant, uniform_pdf, flag=True)
@@ -321,6 +324,3 @@ if __name__ == "__main__":
     for w in task_3_4(uniform, a_uniform, b_uniform):
         f_3.write(str(w) + "\n\n\n")
     f_3.close()
-
-
-
